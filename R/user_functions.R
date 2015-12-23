@@ -14,7 +14,7 @@
 #' }
 #' @export
 #'
-mxmap <- function(type, df, geography = "all", fix.id = FALSE, method = "ggplot"){
+mxmap <- function(type, df, geography = "all", method = "ggplot"){
   type <- tolower(type)
 
   if(type == "state"){
@@ -75,9 +75,9 @@ mxmap_state_p <- function(df){
       if(!("value" %in% names(d))){stop("value column not found in data")}
       
       # get geography to merge 
-      geo <- data(mxstates, package = "mexicomapR")
+      geo <- data("mxstates", package = "mexicomapR")
       
-      d <- base::merge(d, geo)
+      d <- base::merge(d, mxstates)
       m <- ggplot(d, 
                   aes(long, 
                       lat, group = group)) +
@@ -89,8 +89,7 @@ mxmap_state_p <- function(df){
   return(m)
 }
 
-
-#' Creates municipality map
+#' Creates ggplot municipality map
 #'
 #' Generates a static state map 
 #' @param df Data frame or vector with information to paint geography. The data must contain an "id" and a "value" column to be matched.
@@ -114,7 +113,7 @@ mxmap_municipality_p <- function(df){
     if(!("value" %in% names(d))){stop("value column not found in data")}
     
     # get geography to merge 
-    geo <- data(mxmunicipality, package = "mexicomapR")
+    geo <- data("mxmunicipality", package = "mexicomapR")
     
     d <- base::merge(d, geo)
     m <- ggplot(d, 
@@ -127,3 +126,93 @@ mxmap_municipality_p <- function(df){
   }
   return(m)
 }
+
+#' Creates leaflet state map
+#'
+#' Generates a leaflet state map 
+#' @param df Data frame or vector with information to paint geography. The data must contain an "id" and a "value" column to be matched.
+#' @author Eduardo Flores
+#' @return htmlwidget object
+#' @seealso mxmap
+#' @examples
+#' \dontrun{
+#' # change... 
+#' population_choroplethr <- mxmap("municipality", data(mxpop2010))
+#' }
+#' @export
+#'
+mxmap_state_l <- function(df){
+  
+  if(class(df) == "data.frame" | 
+       class(df) == "matrix"){
+    # clean and fix data frame to merge
+    d <- as.data.frame(df)
+    names(d) <- base::tolower(names(d))
+    if(!("id" %in% names(d))){stop("id column not found in data")}
+    if(!("value" %in% names(d))){stop("value column not found in data")}
+    
+    # get geography to merge 
+    # change 
+    # geo <- data("mxmunicipality", package = "mexicomapR")
+    
+    
+    m <- data.frame("long" = mxstates$long, 
+                    "lat" = mxstates$lat)
+    # debe haber un NA entre cada una ... 
+    m <- as.matrix(m)
+    
+    mx <- leaflet() %>% 
+      addTiles() %>% 
+      setView(-101.5, 21.085, zoom = 5)
+    
+    #puedes poner estado, por estado... 
+    #aguas con los hoyos
+    m <- subset(mxstates, id == "19")
+    m2 <- subset(mxstates, id == "30")
+    mx %>% 
+      addPolygons(lng = m$long, lat = m$lat) %>%
+      addPolygons(lng = m2$long, lat = m2$lat)
+    
+  
+    
+  }else{
+    stop("df must be data.frame or matrix")
+  }
+  return(mx)
+}
+
+
+
+
+
+
+#' Creates state catalog
+#'
+#' Uses \code{data(mxgeography)} to generate a data.frame with two columns: id as factor and name of state, on which to join data. This assures the user will use the correct id's to pass to \code{mxmap()}.
+#' @author Eduardo Flores
+#' @return data.frame
+#' @seealso mxgeography
+#' @examples
+#' mxstate_catalog()
+#' @export
+#'
+mxstate_catalog <- function(){
+  #mxgeography
+}
+#' Creates municipality catalog
+#'
+#' Uses \code{data(mxgeography)} to generate a data.frame with two columns: id as factor and name of municipality, on which to join data. This assures the user will use the correct id's to pass to \code{mxmap()}.
+#' @author Eduardo Flores
+#' @return data.frame
+#' @seealso mxgeography
+#' @examples
+#' mxmunicipality_catalog()
+#' @export
+#'
+mxmunicipality_catalog <- function(){
+  #mxgeography
+}
+
+
+
+

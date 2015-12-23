@@ -5,10 +5,7 @@
 #' @param vector Vector of names or descriptions
 #' @author Eduardo Flores
 #' @examples
-#' \dontrun{
-#' token<-"webservice_token"
-#' CrecimientoZonas<-series_crecimiento_regiones(token)
-#' }
+#' 
 #' @export
 #'
 #'
