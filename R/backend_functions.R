@@ -15,5 +15,4 @@
 mxfind_id <- function(vector){
   v <- tolower(vector)
   v <- unique(v)
-
 }

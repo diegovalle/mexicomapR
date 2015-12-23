@@ -75,7 +75,7 @@ mxmap_state_p <- function(df){
       if(!("value" %in% names(d))){stop("value column not found in data")}
       
       # get geography to merge 
-      geo <- data(mexicomapR::mxstates)
+      geo <- data(mxstates, package = "mexicomapR")
       
       d <- base::merge(d, geo)
       m <- ggplot(d, 
@@ -114,7 +114,7 @@ mxmap_municipality_p <- function(df){
     if(!("value" %in% names(d))){stop("value column not found in data")}
     
     # get geography to merge 
-    geo <- data(mexicomapR::mxmunicipality)
+    geo <- data(mxmunicipality, package = "mexicomapR")
     
     d <- base::merge(d, geo)
     m <- ggplot(d, 
