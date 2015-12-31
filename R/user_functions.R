@@ -1,20 +1,20 @@
 #' Creates a map
 #'
-#' Calls \code{mxmap_state} or \code{mxmap_municipality} to generate a static map. 
+#' Calls \code{mxmap_state_s}, \code{mxmap_state_l}, \code{mxmap_municipality_s} or \code{mxmap_municipality_l} to generate a choropleth map. 
 #' 
 #' @param type Type of map to create (data by state or municipality)
 #' @param df Data frame or vector with information to paint geography. The data must contain an "id" and a "value" column to be matched.
 #' @param method Method to be used (static for ggplot2 object, leaflet for leaflet object)
+#' @param vcol Value column with standard evaluation. Defaults to "value".
 #' @author Eduardo Flores
 #' @return ggplot object
-#' @seealso mxmap_state_p, mxmap_state_l, mxmap_state_g, mxmap_municipality_p, mxmap_municipality_l, mxmap_municipality_g
+#' @seealso mxmap_state_s, mxmap_state_l, mxmap_municipality_s, mxmap_municipality_l
 #' @examples
 #' # A static state map with random data 
 #' data(states_catalog, package = "mexicomapR")
 #' df <- data.frame("id" = states_catalog$id, "value" = runif(n = 32, min = 1, max = 100))
 #' mxmap(type = "state", df)
 #' @export
-#'
 mxmap <- function(type, df, method = "static", vcol = "value"){
   type <- tolower(type)
   # Function designed to call others. 
@@ -28,7 +28,7 @@ mxmap <- function(type, df, method = "static", vcol = "value"){
       if(method == "leaflet"){
         message("Using mxmap_state_l")
         m <- mexicomapR::mxmap_state_l(df, vcol = vcol)}else{
-          stop("Metod not recognized. Use static, leaflet or google")}
+          stop("Metod not recognized. Use static or leaflet")}
     }
   }else{
   if(type == "municipality"){
@@ -40,7 +40,7 @@ mxmap <- function(type, df, method = "static", vcol = "value"){
         message("Using mxmap_municipality_l")
         m <- mexicomapR::mxmap_municipality_l(df, vcol = vcol)
       }else{
-        stop("Metod not recognized. Use static, leaflet or google")}
+        stop("Metod not recognized. Use static or leaflet")}
       }
     }else{stop("Geography not recognized. Use state or municipality")}
   }
@@ -57,6 +57,13 @@ mxmap <- function(type, df, method = "static", vcol = "value"){
 #' @author Eduardo Flores
 #' @return ggplot object
 #' @seealso mxmap
+#' @importFrom sp spTransform
+#' @importFrom sp CRS
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 geom_polygon
+#' @importFrom ggplot2 fortify
+#' @importFrom utils data
 #' @examples
 #' # A state map with random data 
 #' utils::data(states_catalog, package = "mexicomapR")
@@ -82,7 +89,7 @@ mxmap_state_s <- function(df, vcol = "value"){
                   package = "mexicomapR", 
                   envir = e <- new.env())
       geo <- sp::spTransform(x = e$states, 
-                         CRSobj = CRS("+proj=longlat +datum=WGS84"))
+                         CRSobj = sp::CRS("+proj=longlat +datum=WGS84"))
       geo <- ggplot2::fortify(geo)
       
       d <- base::merge(df, geo, by ="id")
@@ -104,6 +111,7 @@ mxmap_state_s <- function(df, vcol = "value"){
 #' @return ggplot object
 #' @seealso mxmap
 #' @importFrom sp spTransform
+#' @importFrom sp CRS
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 aes
 #' @importFrom ggplot2 geom_polygon
@@ -134,7 +142,7 @@ mxmap_municipality_s <- function(df, vcol = "value"){
               package = "mexicomapR", 
               envir = e <- new.env())
   geo <- sp::spTransform(x = e$municipality, 
-                         CRSobj = CRS("+proj=longlat +datum=WGS84"))
+                         CRSobj = sp::CRS("+proj=longlat +datum=WGS84"))
   geo <- ggplot2::fortify(geo)
   
   d <- base::merge(df, geo, by ="id")

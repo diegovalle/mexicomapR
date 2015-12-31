@@ -12,12 +12,14 @@ mxmap(type, df, method = "static", vcol = "value")
 \item{df}{Data frame or vector with information to paint geography. The data must contain an "id" and a "value" column to be matched.}
 
 \item{method}{Method to be used (static for ggplot2 object, leaflet for leaflet object)}
+
+\item{vcol}{Value column with standard evaluation. Defaults to "value".}
 }
 \value{
 ggplot object
 }
 \description{
-Calls \code{mxmap_state} or \code{mxmap_municipality} to generate a static map.
+Calls \code{mxmap_state_s}, \code{mxmap_state_l}, \code{mxmap_municipality_s} or \code{mxmap_municipality_l} to generate a choropleth map.
 }
 \examples{
 # A static state map with random data 
@@ -29,6 +31,6 @@ mxmap(type = "state", df)
 Eduardo Flores
 }
 \seealso{
-mxmap_state_p, mxmap_state_l, mxmap_state_g, mxmap_municipality_p, mxmap_municipality_l, mxmap_municipality_g
+mxmap_state_s, mxmap_state_l, mxmap_municipality_s, mxmap_municipality_l
 }
 

@@ -6,6 +6,7 @@ Date: 2015-12-11
 Author: Eduardo Flores
 LazyData: true
 Maintainer: Eduardo Flores <eduardo@enelmargen.org>
-Description: This package includes Mexican municipality and state fortified shapefiles and some functions to rapidly create static or interactive choroloplethr maps.
+Description: This package includes Mexican municipality and state shapefiles and some functions to rapidly create static or interactive choroloplethr maps.
 License: What license is it under?
 RoxygenNote: 5.0.1
+Imports: sp, ggplot2, utils
