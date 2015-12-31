@@ -2,16 +2,16 @@
 % Please edit documentation in R/user_functions.R
 \name{mxmap}
 \alias{mxmap}
-\title{Creates a static map}
+\title{Creates a map}
 \usage{
-mxmap(type, df, geography = "all", fix.id = FALSE, method = "ggplot")
+mxmap(type, df, method = "static", vcol = "value")
 }
 \arguments{
 \item{type}{Type of map to create (data by state or municipality)}
 
 \item{df}{Data frame or vector with information to paint geography. The data must contain an "id" and a "value" column to be matched.}
 
-\item{geography}{Name of geography (i.e. "Aguascalientes"). Names are searched in \code{data(mxgeography)}. Default is set to = "all", to create a country-wide map.}
+\item{method}{Method to be used (static for ggplot2 object, leaflet for leaflet object)}
 }
 \value{
 ggplot object
@@ -20,9 +20,10 @@ ggplot object
 Calls \code{mxmap_state} or \code{mxmap_municipality} to generate a static map.
 }
 \examples{
-\dontrun{
-population_choroplethr <- mxmap("state", data(mxpop2010))
-}
+# A static state map with random data 
+data(states_catalog, package = "mexicomapR")
+df <- data.frame("id" = states_catalog$id, "value" = runif(n = 32, min = 1, max = 100))
+mxmap(type = "state", df)
 }
 \author{
 Eduardo Flores
