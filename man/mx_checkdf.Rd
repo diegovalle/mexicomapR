@@ -10,6 +10,8 @@ mx_checkdf(df, vcol = "value", nobject = 32)
 \item{df}{Data.frame with id and value columns}
 
 \item{vcol}{Value column with standard evaluation. Defaults to "value".}
+
+\item{nobject}{length of type of map (32 for state or 2457 for municipality)}
 }
 \description{
 Checks unique id's, format of value and other possible issues.

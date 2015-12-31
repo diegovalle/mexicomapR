@@ -65,6 +65,8 @@ mxmap <- function(type, df, method = "static", vcol = "value"){
 #' @export
 #'
 mxmap_state_s <- function(df, vcol = "value"){
+  # appease nse notes
+  d <- long <- lat <- group <- value <- NULL
   # Type of map
   nobject <- 32
     
@@ -84,7 +86,7 @@ mxmap_state_s <- function(df, vcol = "value"){
       geo <- ggplot2::fortify(geo)
       
       d <- base::merge(df, geo, by ="id")
-      m <- ggplot2::ggplot(d, 
+      m <- ggplot2::ggplot(data = d, 
                            ggplot2::aes(long, 
                                         lat, 
                                         group = group)) +
@@ -101,6 +103,12 @@ mxmap_state_s <- function(df, vcol = "value"){
 #' @author Eduardo Flores
 #' @return ggplot object
 #' @seealso mxmap
+#' @importFrom sp spTransform
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 geom_polygon
+#' @importFrom ggplot2 fortify
+#' @importFrom utils data
 #' @examples
 #' # A municipality map with random data 
 #' utils::data(municipality_catalog, package = "mexicomapR")
@@ -109,6 +117,8 @@ mxmap_state_s <- function(df, vcol = "value"){
 #' @export
 #'
 mxmap_municipality_s <- function(df, vcol = "value"){
+  # appease nse notes
+  d <- long <- lat <- group <- value <- NULL
   # Type of map
   nobject <- 2457
   
@@ -129,9 +139,11 @@ mxmap_municipality_s <- function(df, vcol = "value"){
   
   d <- base::merge(df, geo, by ="id")
   m <- ggplot2::ggplot(d, 
-                       aes(long, 
-                           lat, group = group)) +
-    geom_polygon(aes(fill = value))
+                       ggplot2::aes(
+                         x = long, 
+                         y = lat, 
+                         group = group)) +
+    ggplot2::geom_polygon(aes(fill = value))
   
   return(m)
 }
